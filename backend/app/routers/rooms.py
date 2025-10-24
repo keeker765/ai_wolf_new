@@ -4,6 +4,6 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.get("")
+@router.get("/")
 async def list_rooms():
     return {"ok": True, "data": []}
