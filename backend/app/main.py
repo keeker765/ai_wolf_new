@@ -7,8 +7,7 @@ from starlette.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERRO
 
 from app.core.errors import DomainError, to_error_payload
 from app.core.middleware import TraceIdMiddleware
-from app.routers import auth, rooms, games, ai, replay, stt, billing, stats
-
+from app.routers import ai, auth, billing, games, replay, rooms, stats, stt
 
 app = FastAPI(title="AI Werewolf API", version="0.1.0-test")
 app.add_middleware(TraceIdMiddleware)
@@ -55,4 +54,3 @@ app.include_router(stats.router, prefix="/stats", tags=["stats"])
 @app.get("/healthz")
 async def healthz():
     return {"status": "ok"}
-

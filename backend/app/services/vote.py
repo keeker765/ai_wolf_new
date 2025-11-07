@@ -14,4 +14,3 @@ def leaders_of(counts: dict[int, int]) -> tuple[list[int], int]:
     top = max(counts.values())
     leaders = [k for k, v in counts.items() if v == top]
     return leaders, top
-

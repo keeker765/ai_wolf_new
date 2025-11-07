@@ -42,9 +42,10 @@ async def auth_email_verify(payload: Annotated[dict, Body(...)]):
     email = payload.get("email")
     code = payload.get("code")
     if not email or not code:
-        raise DomainError(code="VALIDATION_ERROR", http_status=400, message="email and code required")
+        raise DomainError(
+            code="VALIDATION_ERROR", http_status=400, message="email and code required"
+        )
     saved = _email_codes.get(email)
     if not saved or saved != str(code):
         raise DomainError(code="AUTH_INVALID_CODE", http_status=401, message="invalid code")
     return {"ok": True, "data": {"token": "email-token", "refresh": "email-refresh"}}
-

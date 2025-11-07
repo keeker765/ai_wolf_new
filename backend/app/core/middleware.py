@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 
@@ -15,4 +16,3 @@ class TraceIdMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers["x-request-id"] = trace_id
         return response
-
