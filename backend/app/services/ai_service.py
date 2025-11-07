@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import random
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -144,7 +145,5 @@ def _fallback_generate_speech(role: str, phase: str) -> dict[str, Any]:
 
 def _fallback_decide_action(options: list) -> dict[str, Any]:
     """Fallback action decision when OpenAI is unavailable."""
-    import random
-
     pick = random.choice(options) if options else None
     return {"pick": pick, "confidence": 0.5}

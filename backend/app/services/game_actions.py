@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import random
+
 from app.core.errors import DomainError
 from app.services.game_state import GameState, Phase, Role
 from app.services.vote import leaders_of, tally
@@ -143,8 +145,6 @@ def resolve_night(game: GameState):
             # In production: this should wait for player input
             alive = game.alive_players()
             if alive:
-                import random
-
                 target = random.choice(alive)
                 hunter_shots.append((seat, target))
                 game.add_event(
@@ -196,8 +196,6 @@ def resolve_vote(game: GameState) -> dict:
             # In production: this should wait for player input
             alive = game.alive_players()
             if alive:
-                import random
-
                 target = random.choice(alive)
                 game.players[target].alive = False
                 game.add_event(
