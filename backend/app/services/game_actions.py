@@ -133,13 +133,31 @@ def resolve_night(game: GameState):
         deaths.add(game.night.witch_poison_target)
 
     # Apply deaths
+    hunter_shots = []
     for seat in deaths:
         game.players[seat].alive = False
 
         # Hunter can shoot if killed at night (configurable, default=true)
         if game.players[seat].role == Role.HUNTER:
-            # TODO: Implement hunter shot logic
-            pass
+            # For test period: hunter automatically shoots a random alive player
+            # In production: this should wait for player input
+            alive = game.alive_players()
+            if alive:
+                import random
+
+                target = random.choice(alive)
+                hunter_shots.append((seat, target))
+                game.add_event(
+                    "hunter_shot",
+                    actor_seat=seat,
+                    payload={"target": target, "trigger": "night_kill"},
+                )
+
+    # Apply hunter shots
+    for _shooter, target in hunter_shots:
+        if game.players[target].alive:
+            game.players[target].alive = False
+            deaths.add(target)
 
     return list(deaths)
 
@@ -174,7 +192,18 @@ def resolve_vote(game: GameState) -> dict:
 
         # Hunter can shoot if lynched
         if game.players[executed].role == Role.HUNTER:
-            # TODO: Implement hunter shot logic
-            pass
+            # For test period: hunter automatically shoots a random alive player
+            # In production: this should wait for player input
+            alive = game.alive_players()
+            if alive:
+                import random
+
+                target = random.choice(alive)
+                game.players[target].alive = False
+                game.add_event(
+                    "hunter_shot",
+                    actor_seat=executed,
+                    payload={"target": target, "trigger": "lynch"},
+                )
 
     return {"action": "lynch", "executed": executed}

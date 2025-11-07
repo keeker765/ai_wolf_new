@@ -127,3 +127,47 @@ def test_leaders_of_empty():
     leaders, top = leaders_of(counts)
     assert top == 0
     assert leaders == []
+
+
+def test_resolve_night_with_hunter():
+    """Test that hunter shoots when killed at night."""
+    from app.services.game_actions import resolve_night
+
+    game = GameState(game_id="g1", room_id="r1", seats=6)
+    game.players[1] = PlayerState(seat=1, user_id="u1", role=Role.HUNTER, alive=True)
+    game.players[2] = PlayerState(seat=2, user_id="u2", role=Role.VILLAGER, alive=True)
+    game.players[3] = PlayerState(seat=3, user_id="u3", role=Role.VILLAGER, alive=True)
+
+    # Wolf kills hunter
+    game.night.wolf_target = 1
+
+    deaths = resolve_night(game)
+
+    # Hunter should be dead
+    assert not game.players[1].alive
+    # At least one other player should be shot by hunter
+    assert len(deaths) >= 1
+    assert 1 in deaths
+
+
+def test_resolve_vote_with_hunter():
+    """Test that hunter shoots when lynched."""
+    from app.services.game_actions import resolve_vote
+
+    game = GameState(game_id="g1", room_id="r1", seats=6)
+    game.players[1] = PlayerState(seat=1, user_id="u1", role=Role.HUNTER, alive=True)
+    game.players[2] = PlayerState(seat=2, user_id="u2", role=Role.VILLAGER, alive=True)
+    game.players[3] = PlayerState(seat=3, user_id="u3", role=Role.VILLAGER, alive=True)
+    game.phase = Phase.VOTE
+
+    # Vote to lynch hunter
+    game.vote.ballots = {2: 1, 3: 1}
+
+    result = resolve_vote(game)
+
+    # Hunter should be dead
+    assert not game.players[1].alive
+    assert result["executed"] == 1
+    # Check at least one other player is dead from hunter shot
+    dead_count = sum(1 for p in game.players.values() if not p.alive)
+    assert dead_count >= 2  # hunter + at least one shot

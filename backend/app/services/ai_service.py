@@ -115,20 +115,30 @@ async def decide_action_with_openai(
 
 def _fallback_generate_speech(role: str, phase: str) -> dict[str, Any]:
     """Fallback speech generation when OpenAI is unavailable."""
-    stub_speeches = {
-        "狼人": "我觉得这局情况很复杂，大家要理性分析。",
-        "W": "我觉得这局情况很复杂，大家要理性分析。",
-        "预言家": "昨晚我验了一个人，结果显示是好人。",
-        "S": "昨晚我验了一个人，结果显示是好人。",
-        "女巫": "我选择保留我的药，等更关键的时刻使用。",
-        "Witch": "我选择保留我的药，等更关键的时刻使用。",
-        "猎人": "我会默默观察，在合适的时候出手。",
-        "H": "我会默默观察，在合适的时候出手。",
-        "平民": "我是平民，希望大家能找到真正的狼人。",
-        "V": "我是平民，希望大家能找到真正的狼人。",
+    # Map role to canonical speech
+    role_map = {
+        "狼人": "werewolf",
+        "W": "werewolf",
+        "预言家": "seer",
+        "S": "seer",
+        "女巫": "witch",
+        "Witch": "witch",
+        "猎人": "hunter",
+        "H": "hunter",
+        "平民": "villager",
+        "V": "villager",
     }
 
-    text = stub_speeches.get(role, "我会仔细观察局势。")
+    speeches = {
+        "werewolf": "我觉得这局情况很复杂，大家要理性分析。",
+        "seer": "昨晚我验了一个人，结果显示是好人。",
+        "witch": "我选择保留我的药，等更关键的时刻使用。",
+        "hunter": "我会默默观察，在合适的时候出手。",
+        "villager": "我是平民，希望大家能找到真正的狼人。",
+    }
+
+    canonical_role = role_map.get(role, "villager")
+    text = speeches[canonical_role]
     return {"text": text, "confidence": 0.5}
 
 
