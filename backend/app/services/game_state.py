@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Literal
+from typing import Any, Literal
 
 
 class Role(str, Enum):
@@ -141,7 +141,7 @@ class GameState:
                 self.vote = VoteState()
 
 
-def create_game(game_id: str, room_id: str, seats: int, members: dict[str, any]) -> GameState:
+def create_game(game_id: str, room_id: str, seats: int, members: dict[str, Any]) -> GameState:
     """Create a new game state."""
     role_assignments = assign_roles(seats)
 

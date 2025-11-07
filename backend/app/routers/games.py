@@ -104,6 +104,11 @@ async def post_action(
         )
 
     elif payload.kind == "skill":
+        if payload.target_seat is None:
+            raise DomainError(
+                code="GAME_INVALID_ACTION", http_status=400, message="target_seat required"
+            )
+
         if payload.skill_name == "wolf_kill":
             handle_wolf_kill(game, actor_seat, payload.target_seat)
         elif payload.skill_name == "witch_heal":
