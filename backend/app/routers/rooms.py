@@ -120,4 +120,10 @@ async def start_room(room_id: Annotated[str, Path(min_length=1)]):
     if len(room.members) < room.seats and not room.fill_ai:
         raise DomainError(code="VALIDATION_ERROR", http_status=400, message="not enough players")
     game_id = room_manager.start_game(room_id)
+
+    # Import here to avoid circular dependency
+    from app.routers.games import start_game_for_room
+
+    start_game_for_room(room_id, game_id)
+
     return {"ok": True, "data": {"game_id": game_id}}
