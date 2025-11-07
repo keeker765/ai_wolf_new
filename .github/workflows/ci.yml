@@ -37,8 +37,8 @@ jobs:
 
       - name: Pytest
         working-directory: backend
-        run: pytest -q
+        run: PYTHONPATH=. pytest -q
 
       - name: Mypy (types)
         working-directory: backend
-        run: mypy backend/app backend/tests
+        run: mypy app tests

@@ -4,6 +4,8 @@ line-length = 100
 [tool.ruff]
 line-length = 100
 respect-gitignore = true
+
+[tool.ruff.lint]
 extend-select = ["I", "UP", "B", "Q", "C4"]
 
 [tool.ruff.format]

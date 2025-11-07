@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any
 
 
 def now_ts() -> float:
@@ -35,7 +34,9 @@ class RoomManager:
     def __init__(self) -> None:
         self.rooms: dict[str, Room] = {}
 
-    def create_room(self, *, seats: int, fill_ai: bool, name: str | None, owner_id: str | None) -> Room:
+    def create_room(
+        self, *, seats: int, fill_ai: bool, name: str | None, owner_id: str | None
+    ) -> Room:
         room_id = short_id("r")
         room = Room(id=room_id, name=name, seats=seats, fill_ai=fill_ai, owner_id=owner_id)
         self.rooms[room_id] = room
@@ -65,4 +66,3 @@ class RoomManager:
 
 # Singleton for test period
 room_manager = RoomManager()
-

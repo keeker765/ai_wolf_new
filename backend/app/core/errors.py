@@ -24,4 +24,3 @@ def to_error_payload(
     if trace_id:
         err["trace_id"] = trace_id
     return {"ok": False, "error": err}
-
